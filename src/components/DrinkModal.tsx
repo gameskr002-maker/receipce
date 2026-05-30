@@ -1,241 +1,281 @@
-import { useEffect, useCallback } from 'react';
-import { X, Flame, FlaskConical, Clock, Sparkles, Droplets } from 'lucide-react';
+import { useCallback, useEffect } from 'react';
+import { X, Flame, FlaskConical, Clock, Sparkles } from 'lucide-react';
 import type { Drink } from '../data/drinks';
 
-interface DrinkModalProps {
+interface Props {
   drink: Drink;
   onClose: () => void;
 }
 
-const woodTypes: Record<number, string> = {
+const woodLabels: Record<number, string> = {
   0: 'Без бочки',
-  1: '🌲 Берёза',
-  2: '🪵 Дуб',
-  3: '🌴 Джунглевое',
-  4: '🌲 Ель',
-  5: '🌿 Акация',
-  6: '🪵 Тёмный дуб',
+  1: 'Берёза 🌲',
+  2: 'Дуб 🪵',
+  3: 'Тропик 🌴',
+  4: 'Ель 🌲',
+  5: 'Акация 🌿',
+  6: 'Тёмный дуб 🪵',
+  7: 'Багровое',
+  8: 'Искаженное',
+  9: 'Мангровое',
 };
 
-const getAlcoholColor = (alc: number): string => {
-  if (alc <= 0)  return '#4ade80';
-  if (alc <= 10) return '#facc15';
-  if (alc <= 25) return '#fb923c';
-  if (alc <= 45) return '#f87171';
+function alcColor(a: number) {
+  if (a <= 0) return '#4ade80';
+  if (a <= 10) return '#facc15';
+  if (a <= 30) return '#fb923c';
+  if (a <= 55) return '#f87171';
   return '#ef4444';
-};
-
-const getDifficultyColor = (diff: number): string => {
-  if (diff <= 3) return '#4ade80';
-  if (diff <= 5) return '#facc15';
-  if (diff <= 7) return '#fb923c';
+}
+function diffColor(d: number) {
+  if (d <= 3) return '#4ade80';
+  if (d <= 5) return '#facc15';
+  if (d <= 7) return '#fb923c';
   return '#ef4444';
-};
-
-const getDifficultyLabel = (diff: number): string => {
-  if (diff <= 2) return 'Новичок';
-  if (diff <= 4) return 'Ученик';
-  if (diff <= 6) return 'Мастер';
-  if (diff <= 8) return 'Эксперт';
+}
+function diffLabel(d: number) {
+  if (d <= 2) return 'Новичок';
+  if (d <= 4) return 'Ученик';
+  if (d <= 6) return 'Мастер';
+  if (d <= 8) return 'Эксперт';
   return 'Легенда';
-};
+}
 
-const getAlcoholLabel = (alc: number): string => {
-  if (alc <= 0)  return 'Трезвость';
-  if (alc <= 5)  return 'Лёгкое';
-  if (alc <= 15) return 'Умеренное';
-  if (alc <= 30) return 'Крепкое';
-  if (alc <= 50) return 'Жёсткое';
-  return 'Огненное';
-};
-
-export default function DrinkModal({ drink, onClose }: DrinkModalProps) {
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); },
-    [onClose]
+export default function DrinkModal({ drink, onClose }: Props) {
+  const onKey = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    },
+    [onClose],
   );
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
     };
-  }, [handleKeyDown]);
+  }, [onKey]);
 
-  const alcoholLabel   = drink.alcohol > 0  ? `${drink.alcohol}%` : drink.alcohol < 0 ? 'Отрезв.' : '0%';
-  const accentColor    = drink.color === '#FFFFFF' || drink.color === '#1C1C1C' ? '#D4AF37' : drink.color;
+  const accent = drink.color === '#F0F0F0' || drink.color === '#C8E8F0' || drink.color === '#2C2C2C'
+    ? '#D4AF37'
+    : drink.color;
+
+  const alcLabel = drink.alcohol > 0 ? `${drink.alcohol}%` : drink.alcohol < 0 ? 'Отрезв.' : '0%';
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>, ingId: string) => {
+    const img = e.currentTarget;
+    const stage = parseInt(img.dataset.stage || '0', 10);
+
+    const itemMap: Record<string, string> = {
+      WHEAT: 'wheat',
+      SUGAR: 'sugar',
+      COCOA_BEANS: 'cocoa_beans',
+      SWEET_BERRIES: 'sweet_berries',
+      PUMPKIN: 'pumpkin',
+      GLOW_BERRIES: 'glow_berries',
+      APPLE: 'apple',
+      COAL: 'coal',
+      SUGAR_CANE: 'sugar_cane',
+      POTATO: 'potato',
+      CACTUS: 'cactus',
+      SHORT_GRASS: 'grass',
+      POISONOUS_POTATO: 'poisonous_potato',
+      BAMBOO: 'bamboo',
+      OAK_LOG: 'oak_log',
+      MELON_SLICE: 'melon_slice',
+      SPIDER_EYE: 'spider_eye',
+      OAK_LEAVES: 'oak_leaves',
+      SUNFLOWER: 'sunflower',
+      BLAZE_POWDER: 'blaze_powder',
+      NETHER_WART: 'nether_wart',
+      QUARTZ: 'quartz',
+      DARK_OAK_LOG: 'dark_oak_log',
+      GOLD_NUGGET: 'gold_nugget',
+      FEATHER: 'feather',
+      MILK_BUCKET: 'milk_bucket',
+      SNOWBALL: 'snowball',
+      OAK_DOOR: 'oak_door',
+      FERMENTED_SPIDER_EYE: 'fermented_spider_eye',
+      ROTTEN_FLESH: 'rotten_flesh',
+      MAGMA_CREAM: 'magma_cream',
+    };
+
+    const mapped = itemMap[ingId] || ingId.toLowerCase();
+
+    if (stage === 0) {
+      img.dataset.stage = '1';
+      img.src = `https://cdn.jsdelivr.net/gh/misode/mcmeta@assets/assets/minecraft/textures/item/${mapped}.png`;
+    } else if (stage === 1) {
+      img.dataset.stage = '2';
+      img.src = `https://cdn.jsdelivr.net/gh/misode/mcmeta@assets/assets/minecraft/textures/block/${mapped}.png`;
+    } else {
+      img.style.display = 'none';
+    }
+  };
 
   return (
     <div
       className="modal-backdrop"
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
       role="dialog"
       aria-modal="true"
       aria-label={`Рецепт: ${drink.name}`}
     >
-      <div className="modal-glass">
-        {/* Accent gradient top bar */}
-        <div
-          className="h-1.5 w-full rounded-t-3xl"
-          style={{ background: `linear-gradient(90deg, transparent 0%, ${accentColor} 30%, ${accentColor}99 70%, transparent 100%)` }}
-        />
+      <div className="modal-box">
+        {/* Accent stripe */}
+        <div style={{ height: 2, background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }} />
 
         {/* Header */}
-        <div className="flex items-start justify-between gap-4 px-6 pt-5 pb-4">
-          <div className="flex-1 min-w-0">
-            {/* Country + Category */}
-            <div className="flex items-center gap-2 mb-2 flex-wrap">
-              <span className="tag-badge text-xs font-medium px-2.5 py-1 rounded-full inline-flex items-center gap-1.5">
-                <span>{drink.countryFlag}</span>
-                <span>{drink.country}</span>
-              </span>
-              <span className="text-xs text-[#5a5a5a] px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.06]">
-                {drink.category}
-              </span>
+        <div style={{ padding: '16px 20px 12px', display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            {/* Badges */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap', marginBottom: 6 }}>
+              <span className="tag">{drink.countryFlag} {drink.country}</span>
+              <span className="tag-plain">{drink.category}</span>
+              {drink.glint && <span className="tag-plain">✨ Светится</span>}
             </div>
-            <h2
-              className="text-2xl sm:text-3xl font-bold leading-tight mb-1"
-              style={{
-                fontFamily: "'Playfair Display', serif",
-                color: accentColor === '#D4AF37' ? '#F5F5F5' : accentColor,
-                textShadow: `0 0 40px ${accentColor}33`,
-              }}
-            >
+            {/* Name */}
+            <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-1)' }}>
               {drink.name}
             </h2>
-            {/* Lore */}
-            <div className="mt-2 space-y-0.5">
-              {drink.lore.map((line, i) => (
-                <p key={i} className="text-sm text-[#7a7a7a] italic leading-relaxed">
-                  «{line}»
-                </p>
-              ))}
-            </div>
           </div>
 
-          {/* Drink icon */}
-          <div className="flex flex-col items-center gap-2 shrink-0">
-            <div
-              className="w-14 h-14 rounded-2xl flex items-center justify-center border"
-              style={{
-                background: `linear-gradient(135deg, ${accentColor}18, ${accentColor}08)`,
-                borderColor: `${accentColor}30`,
-                boxShadow: `0 0 20px ${accentColor}18`,
-              }}
-            >
-              <Droplets className="w-7 h-7" style={{ color: accentColor }} />
-            </div>
-
-            {/* Close */}
-            <button
-              onClick={onClose}
-              className="w-8 h-8 rounded-xl flex items-center justify-center text-[#5a5a5a] hover:text-[#F5F5F5] hover:bg-white/[0.07] transition-all duration-200"
-              aria-label="Закрыть"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-
-        {/* Quick meta */}
-        <div className="flex items-center gap-3 px-6 pb-4 text-xs text-[#6B6B6B] flex-wrap">
-          <div className="flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5" />
-            <span>{drink.cookingTime} мин варки</span>
-          </div>
-          {drink.distillRuns > 0 && (
-            <div className="flex items-center gap-1.5">
-              <FlaskConical className="w-3.5 h-3.5" />
-              <span>{drink.distillRuns}× перегонка</span>
-            </div>
-          )}
-          {drink.age > 0 && (
-            <div className="flex items-center gap-1.5">
-              <span>{woodTypes[drink.wood] || '🪵 Бочка'}</span>
-              <span>· {drink.age} {getYearsLabel(drink.age)}</span>
-            </div>
-          )}
-        </div>
-
-        <div className="h-px bg-white/[0.06] mx-6" />
-
-        {/* Stats: alcohol + difficulty */}
-        <div className="grid grid-cols-2 gap-3 px-6 py-4">
-          {/* Alcohol */}
-          <div
-            className="rounded-2xl p-4 border"
+          {/* Close */}
+          <button
+            onClick={onClose}
+            aria-label="Закрыть"
             style={{
-              background: `linear-gradient(135deg, ${getAlcoholColor(drink.alcohol)}08, transparent)`,
-              borderColor: `${getAlcoholColor(drink.alcohol)}20`,
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: 'var(--text-3)',
+              padding: 4,
+              borderRadius: 6,
+              display: 'flex',
+              alignItems: 'center',
+              transition: 'color 0.15s',
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-1)')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-3)')}
           >
-            <div className="flex items-center gap-1.5 mb-2">
-              <Flame className="w-3.5 h-3.5 text-[#6B6B6B]" />
-              <span className="text-[11px] uppercase tracking-wider text-[#6B6B6B] font-semibold">Крепость</span>
+            <X size={16} />
+          </button>
+        </div>
+
+        {/* Lore */}
+        <div style={{ padding: '0 20px 12px' }}>
+          {drink.lore.map((l, i) => (
+            <p key={i} style={{ fontSize: 12.5, color: 'var(--text-2)', fontStyle: 'italic', lineHeight: 1.5, marginBottom: 4 }}>
+              «{l}»
+            </p>
+          ))}
+        </div>
+
+        {/* Monospace Specs Bar */}
+        <div
+          style={{
+            padding: '0 20px 14px',
+            display: 'flex',
+            gap: 12,
+            flexWrap: 'wrap',
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: '11px',
+            color: 'var(--text-3)',
+          }}
+        >
+          <div>ВАРКА: {drink.cookingTime}М</div>
+          {drink.distillRuns > 0 && <div>• ПЕРЕГОНКА: {drink.distillRuns}×</div>}
+          {drink.age > 0 && (
+            <div>
+              • {woodLabels[drink.wood]?.toUpperCase() || 'БОЧКА'} · {drink.age} ЛЕТ
             </div>
-            <div className="text-2xl font-bold mb-1" style={{ color: getAlcoholColor(drink.alcohol) }}>
-              {alcoholLabel}
+          )}
+        </div>
+
+        <div className="divider" />
+
+        {/* Stats Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, padding: '14px 20px' }}>
+          {/* Alcohol */}
+          <div style={{ padding: '10px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.015)', border: '1px solid #121214' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 4 }}>
+              <Flame size={11} color="var(--text-3)" />
+              <span style={{ fontSize: 9.5, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-3)', fontWeight: 600 }}>Крепость</span>
             </div>
-            <div className="stat-bar-track mb-1.5">
+            <div style={{ fontSize: 18, fontWeight: 700, color: alcColor(drink.alcohol), marginBottom: 4, fontFamily: "'JetBrains Mono', monospace" }}>
+              {alcLabel}
+            </div>
+            <div className="bar-track">
               <div
-                className="stat-bar-fill"
+                className="bar-fill"
                 style={{
-                  width: `${Math.min((drink.alcohol / 80) * 100, 100)}%`,
-                  background: `linear-gradient(90deg, ${getAlcoholColor(drink.alcohol)}66, ${getAlcoholColor(drink.alcohol)})`,
+                  width: `${Math.min((Math.abs(drink.alcohol) / 80) * 100, 100)}%`,
+                  background: alcColor(drink.alcohol),
                 }}
               />
             </div>
-            <span className="text-[10px] font-semibold" style={{ color: getAlcoholColor(drink.alcohol) }}>
-              {getAlcoholLabel(drink.alcohol)}
-            </span>
           </div>
 
           {/* Difficulty */}
-          <div
-            className="rounded-2xl p-4 border"
-            style={{
-              background: `linear-gradient(135deg, ${getDifficultyColor(drink.difficulty)}08, transparent)`,
-              borderColor: `${getDifficultyColor(drink.difficulty)}20`,
-            }}
-          >
-            <div className="flex items-center gap-1.5 mb-2">
-              <FlaskConical className="w-3.5 h-3.5 text-[#6B6B6B]" />
-              <span className="text-[11px] uppercase tracking-wider text-[#6B6B6B] font-semibold">Сложность</span>
+          <div style={{ padding: '10px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.015)', border: '1px solid #121214' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 4 }}>
+              <FlaskConical size={11} color="var(--text-3)" />
+              <span style={{ fontSize: 9.5, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-3)', fontWeight: 600 }}>Сложность</span>
             </div>
-            <div className="text-2xl font-bold mb-1" style={{ color: getDifficultyColor(drink.difficulty) }}>
-              {drink.difficulty}<span className="text-sm text-[#5a5a5a] font-normal">/10</span>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 4 }}>
+              <span style={{ fontSize: 18, fontWeight: 700, color: diffColor(drink.difficulty), fontFamily: "'JetBrains Mono', monospace" }}>
+                {drink.difficulty}
+              </span>
+              <span style={{ fontSize: 10, color: 'var(--text-3)', fontFamily: "'JetBrains Mono', monospace" }}>
+                /10 · {diffLabel(drink.difficulty).toUpperCase()}
+              </span>
             </div>
-            <div className="stat-bar-track mb-1.5">
+            <div className="bar-track">
               <div
-                className="stat-bar-fill"
+                className="bar-fill"
                 style={{
                   width: `${(drink.difficulty / 10) * 100}%`,
-                  background: `linear-gradient(90deg, ${getDifficultyColor(drink.difficulty)}66, ${getDifficultyColor(drink.difficulty)})`,
+                  background: diffColor(drink.difficulty),
                 }}
               />
             </div>
-            <span className="text-[10px] font-semibold" style={{ color: getDifficultyColor(drink.difficulty) }}>
-              {getDifficultyLabel(drink.difficulty)}
-            </span>
           </div>
         </div>
 
-        <div className="h-px bg-white/[0.06] mx-6" />
+        <div className="divider" />
 
         {/* Ingredients */}
-        <div className="px-6 py-4">
-          <h3 className="text-xs uppercase tracking-widest text-[#D4AF37]/70 font-bold mb-3 flex items-center gap-2">
-            <span>📋</span> Ингредиенты
+        <div style={{ padding: '14px 20px' }}>
+          <h3 style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--gold)', fontWeight: 700, marginBottom: 8, fontFamily: "'JetBrains Mono', monospace" }}>
+            РЕЦЕПТУРА
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 6 }}>
             {drink.ingredients.map((ing, i) => (
-              <div key={i} className="ingredient-row">
-                <span className="text-sm text-[#e0e0e0]">{ing.name}</span>
+              <div key={i} className="ing-row">
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, flex: 1, minWidth: 0 }}>
+                  <img
+                    src={ing.iconUrl}
+                    alt={ing.name}
+                    className="mc-icon"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => handleImageError(e, ing.id)}
+                  />
+                  <span style={{ fontSize: 12.5, color: 'var(--text-1)', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                    {ing.name}
+                  </span>
+                </div>
                 <span
-                  className="text-sm font-bold"
-                  style={{ fontFamily: "'JetBrains Mono', monospace", color: accentColor }}
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: 12.5,
+                    fontWeight: 500,
+                    color: accent,
+                  }}
                 >
                   ×{ing.amount}
                 </span>
@@ -244,52 +284,72 @@ export default function DrinkModal({ drink, onClose }: DrinkModalProps) {
           </div>
         </div>
 
-        <div className="h-px bg-white/[0.06] mx-6" />
+        <div className="divider" />
 
         {/* Quality variants */}
-        <div className="px-6 py-4">
-          <h3 className="text-xs uppercase tracking-widest text-[#D4AF37]/70 font-bold mb-3 flex items-center gap-2">
-            <span>🏷️</span> Качество варки
+        <div style={{ padding: '14px 20px' }}>
+          <h3 style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--gold)', fontWeight: 700, marginBottom: 8, fontFamily: "'JetBrains Mono', monospace" }}>
+            РЕЗУЛЬТАТ ВАРКИ
           </h3>
-          <div className="flex flex-col gap-2">
-            {drink.nameVariants.map((variant, i) => {
-              const classes = i === 0 ? 'quality-bad' : i === 1 ? 'quality-good' : 'quality-perfect';
-              const icons   = ['😶', '👍', '✨'];
-              const labels  = ['Плохо', 'Хорошо', 'Идеально'];
-              return (
-                <div
-                  key={i}
-                  className="flex items-center gap-3 px-3 py-2 rounded-xl"
-                  style={{
-                    background: i === 2 ? 'rgba(212,175,55,0.06)' : 'rgba(255,255,255,0.02)',
-                    border: `1px solid ${i === 2 ? 'rgba(212,175,55,0.15)' : 'rgba(255,255,255,0.04)'}`,
-                  }}
-                >
-                  <span className="text-base">{icons[i]}</span>
-                  <span className={`text-sm flex-1 ${classes}`}>{variant}</span>
-                  <span className="text-[10px] text-[#5a5a5a] font-semibold uppercase tracking-wider">{labels[i]}</span>
-                </div>
-              );
-            })}
-          </div>
+          {[
+            { label: 'ПЛОХО', icon: '😶', name: drink.nameBad, cls: 'quality-bad' },
+            { label: 'ХОРОШО', icon: '👍', name: drink.nameNormal, cls: 'quality-normal' },
+            { label: 'ИДЕАЛЬНО', icon: '✨', name: drink.name, cls: 'quality-perfect' },
+          ].map((q, i) => (
+            <div
+              key={i}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                padding: '6px 8px',
+                borderRadius: 6,
+                marginBottom: 4,
+                background: i === 2 ? 'rgba(212,175,55,0.025)' : 'rgba(255,255,255,0.008)',
+                border: `1px solid ${i === 2 ? 'rgba(212,175,55,0.1)' : '#121214'}`,
+              }}
+            >
+              <span style={{ fontSize: 13 }}>{q.icon}</span>
+              <span className={q.cls} style={{ flex: 1, fontSize: 12.5, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                {q.name || '—'}
+              </span>
+              <span style={{ fontSize: 9, color: 'var(--text-3)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', fontFamily: "'JetBrains Mono', monospace" }}>
+                {q.label}
+              </span>
+            </div>
+          ))}
         </div>
 
-        {/* Effects — RPG style */}
+        {/* Effects */}
         {drink.effects.length > 0 && (
           <>
-            <div className="h-px bg-white/[0.06] mx-6" />
-            <div className="px-6 py-4">
-              <h3 className="text-xs uppercase tracking-widest text-[#D4AF37]/70 font-bold mb-3 flex items-center gap-2">
-                <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]/70" />
-                Эффекты заклинания
+            <div className="divider" />
+            <div style={{ padding: '14px 20px' }}>
+              <h3 style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--gold)', fontWeight: 700, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6, fontFamily: "'JetBrains Mono', monospace" }}>
+                ЭФФЕКТЫ ПРИЕМКИ
               </h3>
-              <div className="flex flex-col gap-2">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
                 {drink.effects.map((eff, i) => (
-                  <div key={i} className="rpg-effect">
-                    <span className="rpg-effect-name">{eff.name}</span>
-                    <span className="rpg-level-badge">УР.{eff.level}</span>
+                  <div key={i} className="rpg-row" style={{ padding: '5px 8px', borderRadius: 6 }}>
+                    <span style={{ fontSize: 12.5, color: 'var(--text-1)', flex: 1 }}>{eff.name}</span>
+                    <span
+                      style={{
+                        fontFamily: "'JetBrains Mono', monospace",
+                        fontSize: 9,
+                        padding: '1.5px 5px',
+                        borderRadius: 4,
+                        background: 'rgba(212,175,55,0.06)',
+                        border: '1px solid rgba(212,175,55,0.15)',
+                        color: 'var(--gold)',
+                        fontWeight: 600,
+                      }}
+                    >
+                      УР.{eff.level}
+                    </span>
                     {eff.duration && (
-                      <span className="rpg-duration">{eff.duration}с</span>
+                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9.5, color: 'var(--text-3)' }}>
+                        {eff.duration}с
+                      </span>
                     )}
                   </div>
                 ))}
@@ -299,21 +359,12 @@ export default function DrinkModal({ drink, onClose }: DrinkModalProps) {
         )}
 
         {/* Drink message */}
-        <div className="mx-6 mb-6 mt-1 p-4 rounded-2xl" style={{ background: `linear-gradient(135deg, ${accentColor}08, rgba(255,255,255,0.02))`, border: `1px solid ${accentColor}18` }}>
-          <p className="text-sm italic leading-relaxed" style={{ color: `${accentColor}cc` }}>
+        <div style={{ margin: '0 20px 20px', padding: '10px 12px', borderRadius: 8, background: `${accent}04`, border: `1px solid ${accent}0e` }}>
+          <p style={{ fontSize: 12.5, fontStyle: 'italic', color: `${accent}bb`, lineHeight: 1.5 }}>
             💬 {drink.drinkMessage}
           </p>
         </div>
       </div>
     </div>
   );
-}
-
-function getYearsLabel(n: number): string {
-  const abs = Math.abs(n) % 100;
-  const d = abs % 10;
-  if (abs > 10 && abs < 20) return 'лет';
-  if (d >= 2 && d <= 4) return 'года';
-  if (d === 1) return 'год';
-  return 'лет';
 }

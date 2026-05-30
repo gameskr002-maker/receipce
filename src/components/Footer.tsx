@@ -2,53 +2,228 @@ import { Wine, Heart } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/[0.06] mt-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
+    <footer 
+      style={{ 
+        borderTop: '1px solid #1c1c1f', 
+        marginTop: '80px', 
+        width: '100%',
+        background: '#060606',
+        position: 'relative',
+        zIndex: 10
+      }}
+    >
+      <div 
+        style={{ 
+          padding: '64px 0 40px', 
+          display: 'flex', 
+          flexDirection: 'column', 
+          gap: '48px' 
+        }}
+      >
+        {/* Main Columns Grid */}
+        <div 
+          style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', 
+            gap: '40px' 
+          }}
+        >
           {/* Brand */}
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div 
+                style={{ 
+                  width: '32px', 
+                  height: '32px', 
+                  borderRadius: '6px', 
+                  background: 'rgba(212, 175, 55, 0.05)', 
+                  border: '1px solid rgba(212, 175, 55, 0.18)', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center' 
+                }}
+              >
                 <Wine className="w-4 h-4 text-gold" />
               </div>
-              <span className="font-bold text-text-primary">
-                Крафт<span className="text-gold">&</span>Вкус
+              <span 
+                style={{ 
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: '13px', 
+                  fontWeight: 'bold', 
+                  letterSpacing: '0.1em',
+                  color: '#f4f4f5', 
+                  textTransform: 'uppercase' 
+                }}
+              >
+                Крафт<span className="text-gold">//</span>Вкус
               </span>
             </div>
-            <p className="text-sm text-text-muted leading-relaxed">
-              Интерактивное меню крафтовых напитков со всего мира. Рецепты, ингредиенты и уникальные эффекты.
+            <p style={{ fontSize: '12px', color: '#a1a1aa', lineHeight: '1.65', fontWeight: 300 }}>
+              Интерактивный реестр крафтовых напитков со всего мира. Рецепты, ингредиенты и уникальные эффекты в ультра-минималистичном исполнении.
             </p>
           </div>
 
           {/* Navigation */}
           <div>
-            <h4 className="text-xs uppercase tracking-wider text-text-muted font-semibold mb-3">Навигация</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-text-secondary hover:text-gold transition-colors">Все напитки</a></li>
-              <li><a href="#" className="text-sm text-text-secondary hover:text-gold transition-colors">По странам</a></li>
-              <li><a href="#" className="text-sm text-text-secondary hover:text-gold transition-colors">По крепости</a></li>
+            <h4 
+              style={{ 
+                fontSize: '10px', 
+                fontWeight: 600, 
+                letterSpacing: '0.12em', 
+                color: '#52525b', 
+                textTransform: 'uppercase', 
+                marginBottom: '16px', 
+                fontFamily: "'JetBrains Mono', monospace" 
+              }}
+            >
+              Навигация
+            </h4>
+            <ul 
+              style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: '12px', 
+                listStyle: 'none', 
+                padding: 0, 
+                margin: 0 
+              }}
+            >
+              <li>
+                <a 
+                  href="#" 
+                  style={{ fontSize: '12px', color: '#a1a1aa', textDecoration: 'none', transition: 'color 0.15s' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#d4af37')}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#a1a1aa')}
+                >
+                  Все напитки
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="#" 
+                  style={{ fontSize: '12px', color: '#a1a1aa', textDecoration: 'none', transition: 'color 0.15s' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#d4af37')}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#a1a1aa')}
+                >
+                  Сортировка по крепости
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="#" 
+                  style={{ fontSize: '12px', color: '#a1a1aa', textDecoration: 'none', transition: 'color 0.15s' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#d4af37')}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#a1a1aa')}
+                >
+                  Сортировка по сложности
+                </a>
+              </li>
             </ul>
           </div>
 
           {/* Categories */}
           <div>
-            <h4 className="text-xs uppercase tracking-wider text-text-muted font-semibold mb-3">Категории</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-text-secondary hover:text-gold transition-colors">🍺 Пиво & Сидр</a></li>
-              <li><a href="#" className="text-sm text-text-secondary hover:text-gold transition-colors">🍷 Вино & Медовуха</a></li>
-              <li><a href="#" className="text-sm text-text-secondary hover:text-gold transition-colors">🥃 Крепкие напитки</a></li>
-              <li><a href="#" className="text-sm text-text-secondary hover:text-gold transition-colors">🥤 Безалкогольные</a></li>
+            <h4 
+              style={{ 
+                fontSize: '10px', 
+                fontWeight: 600, 
+                letterSpacing: '0.12em', 
+                color: '#52525b', 
+                textTransform: 'uppercase', 
+                marginBottom: '16px', 
+                fontFamily: "'JetBrains Mono', monospace" 
+              }}
+            >
+              Категории
+            </h4>
+            <ul 
+              style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: '12px', 
+                listStyle: 'none', 
+                padding: 0, 
+                margin: 0 
+              }}
+            >
+              <li>
+                <a 
+                  href="#" 
+                  style={{ fontSize: '12px', color: '#a1a1aa', textDecoration: 'none', transition: 'color 0.15s' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#d4af37')}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#a1a1aa')}
+                >
+                  🍺 Пиво & Сидр
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="#" 
+                  style={{ fontSize: '12px', color: '#a1a1aa', textDecoration: 'none', transition: 'color 0.15s' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#d4af37')}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#a1a1aa')}
+                >
+                  🍷 Вино & Медовуха
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="#" 
+                  style={{ fontSize: '12px', color: '#a1a1aa', textDecoration: 'none', transition: 'color 0.15s' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#d4af37')}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#a1a1aa')}
+                >
+                  🥃 Крепкий алкоголь
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="#" 
+                  style={{ fontSize: '12px', color: '#a1a1aa', textDecoration: 'none', transition: 'color 0.15s' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#d4af37')}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#a1a1aa')}
+                >
+                  🥤 Безалкогольные
+                </a>
+              </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-white/[0.06] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-text-muted flex items-center gap-1">
-            © 2026 Крафт&Вкус. Сделано с <Heart className="w-3 h-3 text-red-400/60" /> для ценителей.
-          </p>
-          <p className="text-xs text-text-muted">
-            Все рецепты предназначены для игрового использования
-          </p>
+        {/* Spacious Copyright / Legal Bottom Bar */}
+        <div 
+          style={{ 
+            borderTop: '1px solid #121214', 
+            paddingTop: '24px', 
+            display: 'flex', 
+            flexWrap: 'wrap', 
+            alignItems: 'center', 
+            justifyContent: 'space-between', 
+            gap: '16px' 
+          }}
+        >
+          <div 
+            style={{ 
+              fontSize: '11px', 
+              color: '#52525b', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '6px',
+              fontFamily: "'JetBrains Mono', monospace"
+            }}
+          >
+            © 2026 КРАФТ//ВКУС. СДЕЛАНО С <Heart className="w-3 h-3 text-red-500/50" /> ДЛЯ ЦЕНИТЕЛЕЙ.
+          </div>
+          <div 
+            style={{ 
+              fontSize: '11px', 
+              color: '#52525b',
+              fontFamily: "'JetBrains Mono', monospace",
+              letterSpacing: '0.04em'
+            }}
+          >
+            ДЛЯ ИГРОВОГО ИСПОЛЬЗОВАНИЯ // BREWERY
+          </div>
         </div>
       </div>
     </footer>

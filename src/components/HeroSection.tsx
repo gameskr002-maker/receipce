@@ -1,63 +1,124 @@
-import { Sparkles, Globe, FlaskConical } from 'lucide-react';
-
 export default function HeroSection() {
   return (
-    <section className="relative overflow-hidden">
-      {/* Background image with overlay */}
-      <div className="absolute inset-0">
-        <img
-          src="/images/hero-bg.jpg"
-          alt=""
-          className="w-full h-full object-cover"
-        />
-        <div className="hero-overlay absolute inset-0" />
-      </div>
+    <section 
+      className="relative overflow-hidden border-b border-[#1c1c1f]"
+      style={{ width: '100%', position: 'relative' }}
+    >
+      {/* Subtle vignettes instead of heavy overlays */}
+      <div className="absolute inset-0 bg-[#060606]/85 backdrop-blur-[1px]" />
 
-      {/* Content */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold/[0.08] border border-gold/20 mb-6">
-            <Sparkles className="w-4 h-4 text-gold" />
-            <span className="text-sm text-gold font-medium">Крафтовые рецепты со всего мира</span>
+      <div 
+        style={{ 
+          position: 'relative', 
+          width: '100%', 
+          padding: '56px 16px 80px',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        {/* Strictly Centered Text Block with max-width: 800px */}
+        <div 
+          style={{ 
+            maxWidth: '800px', 
+            width: '100%', 
+            margin: '0 auto', 
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          {/* Faint technical subheader */}
+          <div 
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px', 
+              marginBottom: '16px',
+              justifyContent: 'center',
+            }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+            <span 
+              style={{ 
+                fontSize: '9.5px', 
+                fontWeight: 'bold', 
+                letterSpacing: '0.2em', 
+                color: '#52525b', 
+                textTransform: 'uppercase', 
+                fontFamily: "'JetBrains Mono', monospace" 
+              }}
+            >
+              DATABASE V2 // STABLE
+            </span>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
-            <span className="text-text-primary">Мировая карта </span>
-            <span className="gold-gradient-text">крафта и вкуса</span>
+          {/* Large crisp typography with clean line-height and alignment */}
+          <h2 
+            style={{ 
+              fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+              fontSize: 'clamp(28px, 4.5vw, 44px)',
+              fontWeight: 800,
+              color: '#f4f4f5',
+              lineHeight: '1.25',
+              textAlign: 'center',
+              letterSpacing: '-0.03em',
+              margin: '0 0 16px',
+              width: '100%',
+            }}
+          >
+            Мировая карта <span className="gold-text">крафта и вкуса</span>
           </h2>
 
-          <p className="text-lg sm:text-xl text-text-secondary leading-relaxed mb-8 max-w-2xl mx-auto">
-            Исследуйте уникальные рецепты напитков из разных уголков мира —
-            от японского саке до украинского спотыкача
+          {/* Description text centered, constrained, and with relaxed line-height */}
+          <p 
+            style={{ 
+              fontSize: 'clamp(13px, 1.8vw, 15px)',
+              color: '#a1a1aa',
+              lineHeight: '1.65',
+              textAlign: 'center',
+              fontWeight: 300,
+              maxWidth: '620px',
+              margin: '0 auto 32px',
+              width: '100%',
+            }}
+          >
+            Интерактивный реестр крафтовых рецептов со всего мира — от японского саке до славянского ставленного мёда. Полные спецификации, время варки и оригинальные Minecraft-ингредиенты.
           </p>
 
-          <div className="flex items-center justify-center gap-6 sm:gap-10 text-text-muted">
-            <div className="flex flex-col items-center gap-1.5">
-              <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
-                <Globe className="w-5 h-5 text-gold/60" />
-              </div>
-              <span className="text-xs font-medium">15+ стран</span>
+          {/* Clean minimal linear stats */}
+          <div 
+            style={{ 
+              display: 'flex', 
+              flexWrap: 'wrap', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              rowGap: '8px', 
+              columnGap: '24px', 
+              fontSize: '10.5px', 
+              fontFamily: "'JetBrains Mono', monospace", 
+              color: '#52525b', 
+              textTransform: 'uppercase', 
+              letterSpacing: '0.12em', 
+              borderTop: '1px solid #121214', 
+              paddingTop: '20px',
+              width: '100%',
+            }}
+          >
+            <div>
+              <span style={{ color: '#a1a1aa', fontWeight: 600 }}>48</span> рецептов
             </div>
-            <div className="w-px h-10 bg-white/[0.06]" />
-            <div className="flex flex-col items-center gap-1.5">
-              <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
-                <FlaskConical className="w-5 h-5 text-gold/60" />
-              </div>
-              <span className="text-xs font-medium">25 рецептов</span>
+            <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#1c1c1f' }} />
+            <div>
+              <span style={{ color: '#a1a1aa', fontWeight: 600 }}>15+</span> стран
             </div>
-            <div className="w-px h-10 bg-white/[0.06]" />
-            <div className="flex flex-col items-center gap-1.5">
-              <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-gold/60" />
-              </div>
-              <span className="text-xs font-medium">50+ эффектов</span>
+            <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#1c1c1f' }} />
+            <div>
+              <span style={{ color: '#a1a1aa', fontWeight: 600 }}>50+</span> эффектов
             </div>
           </div>
         </div>
       </div>
-
-      {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-bg-primary to-transparent" />
     </section>
   );
 }
